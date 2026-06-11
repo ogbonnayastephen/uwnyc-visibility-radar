@@ -92,37 +92,24 @@ Rules:
 # SEED BUILDER
 # ---------------------------------------------------------------------------
 def build_seeds(services: str, audience: str, location: str) -> list[str]:
-    """
-    Build a list of seed search terms from the org's context.
-    These seeds are what we run through Google autocomplete and Reddit.
-    No API call needed — just string manipulation.
-    """
-    loc      = location.strip()
-    short    = loc.replace("New York City", "NYC").replace("New York", "NYC")
-    seeds    = []
+    loc   = location.strip()
+    short = loc.replace("New York City", "NYC").replace("New York", "NYC")
+    seeds = []
 
+    # Build cause-based seeds with donor and supporter intent
     for s in services.split(","):
         s = s.strip()
         if s:
-            seeds.append(f"{s} {short}")
-            seeds.append(f"{s} help {short}")
+            seeds.append(f"nonprofits fighting {s} {short}")
+            seeds.append(f"organizations working on {s} {short} to donate to")
+            seeds.append(f"best {s} nonprofits {short}")
+            seeds.append(f"volunteer for {s} {short}")
+            seeds.append(f"corporate giving {s} {short}")
 
-    for a in audience.split(","):
-        a = a.strip()
-        if a:
-            seeds.append(f"help for {a} {short}")
-            seeds.append(f"{a} resources {short}")
-
-    # Donor and volunteer seeds — without these Google/Reddit return only
-    # service-seeker queries and the donor/volunteer categories stay empty.
-    seeds.append(f"donate to help families {short}")
-    seeds.append(f"volunteer opportunities {short}")
-    seeds.append(f"how to support {short} nonprofits")
-
-    # Deduplicate while preserving order, cap at 12 seeds.
-    seen = set()
+    # Deduplicate while preserving order, cap at 10 seeds
+    seen   = set()
     unique = [s for s in seeds if not (s.lower() in seen or seen.add(s.lower()))]
-    return unique[:12]
+    return unique[:10]
 
 
 # ---------------------------------------------------------------------------
