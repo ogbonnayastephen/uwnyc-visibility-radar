@@ -156,8 +156,7 @@ def match_queries_to_pages(
 
     progress("Matching queries to pages...")
 
-    prompt = f"""You are helping match search queries to the most relevant pages
-on {org_name}'s website.
+    prompt = f"""You are helping match search queries to the most relevant SPECIFIC pages on {org_name}'s website.
 
 Here is the site map (page index, URL, title, meta description, content snippet):
 {json.dumps(site_map, indent=2)}
@@ -165,8 +164,13 @@ Here is the site map (page index, URL, title, meta description, content snippet)
 Here are the queries to match:
 {json.dumps(queries, indent=2)}
 
-For each query, return the index number of the single most relevant page.
-If no page is a good match, return null for that query.
+Rules:
+- Match each query to the MOST SPECIFIC page that addresses it directly.
+- NEVER match multiple different queries to the same page unless it is genuinely the only relevant page.
+- AVOID matching queries to homepage, about pages, or broad overview pages like /the-need/ unless no specific page exists.
+- Prefer specific program pages, initiative pages, or topic pages over general pages.
+- If no specific page exists for a query, return null for that query. It is better to return null than to match to a wrong or generic page.
+- Each query deserves its own unique best-matching page where possible.
 
 Return ONLY valid JSON, no markdown fences, in this exact format:
 {{

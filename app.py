@@ -176,7 +176,7 @@ with st.form("discovery_form"):
         )
         audience = st.text_input(
             "Who do you serve?",
-            placeholder="donors, corporate partners, volunteers, advocates, foundations",
+            placeholder="low-income families, ALICE households, working poor, Bronx, Brooklyn, Staten Island",
         )
     with col2:
         location = st.text_input("City or region", value="New York City")
