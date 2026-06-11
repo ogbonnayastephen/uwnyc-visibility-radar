@@ -49,10 +49,10 @@ for key, default in {
 # ---------------------------------------------------------------------------
 # Header
 # ---------------------------------------------------------------------------
-st.title("📡 AEO Radar")
+st.title("📡 UWNYC Visibility Radar")
 st.caption(
-    "Find real queries → crawl your site → check ChatGPT and Perplexity → "
-    "get Claude's exact fixes to make your pages citable."
+    "Find the real questions donors, volunteers, and corporate partners are asking — "
+    "then make sure UWNYC shows up as the answer."
 )
 
 # ---------------------------------------------------------------------------
@@ -60,7 +60,7 @@ st.caption(
 # ---------------------------------------------------------------------------
 with st.sidebar:
     st.header("Organization")
-    org_name = st.text_input("Organization name", value="United Way of NYC")
+    org_name = st.text_input("Organization name", value="United Way of New York City")
     domains_raw = st.text_input(
         "Your domains (comma-separated)",
         value="unitedwaynyc.org, uwnyc.org",
@@ -172,11 +172,11 @@ with st.form("discovery_form"):
     with col1:
         services = st.text_input(
             "What services do you offer?",
-            placeholder="emergency rent help, food assistance, financial coaching",
+            placeholder="Education Equity, Food and Benefits Access, Justice and Opportunity, Health Equity, ALICE research",
         )
         audience = st.text_input(
             "Who do you serve?",
-            placeholder="low-income families, working poor, ALICE households",
+            placeholder="donors, corporate partners, volunteers, advocates, foundations",
         )
     with col2:
         location = st.text_input("City or region", value="New York City")
@@ -207,9 +207,9 @@ if discover_btn:
             st.error(f"Discovery failed: {result['error']}")
         else:
             st.session_state.discovered = {
-                "people_seeking_help":   result.get("people_seeking_help", []),
-                "donors_and_supporters": result.get("donors_and_supporters", []),
-                "volunteers":            result.get("volunteers", []),
+                "donors":            result.get("donors", []),
+                "corporate_partners": result.get("corporate_partners", []),
+                "volunteers":        result.get("volunteers", []),
             }
             st.success(
                 f"Found {result.get('raw_count', 0)} real queries from Google and Reddit. "
@@ -221,9 +221,9 @@ if st.session_state.discovered:
     st.markdown("**Select the queries you want to audit:**")
 
     intent_labels = {
-        "people_seeking_help":   "🆘 People seeking help",
-        "donors_and_supporters": "💛 Donors and supporters",
-        "volunteers":            "🤝 Volunteers",
+        "donors":            "💛 Individual Donors",
+        "corporate_partners": "🏢 Corporate Partners",
+        "volunteers":        "🤝 Volunteers",
     }
 
     selected_queries = []

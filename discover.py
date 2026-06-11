@@ -41,23 +41,18 @@ HEADERS_REDDIT = {"User-Agent": "AEO-Radar-Discovery/1.0 (research tool)"}
 # SYSTEM PROMPT — stays the same for every discovery call.
 # ---------------------------------------------------------------------------
 DISCOVERY_SYSTEM_PROMPT = """\
-You are an AEO (Answer Engine Optimization) strategist specializing in nonprofit
-and social services organizations. You take raw, messy search data scraped from
-Google and Reddit and transform it into a clean, prioritized set of queries the
-organization should optimize for.
+You are an AEO and GEO strategist specializing in nonprofit donor and supporter acquisition for United Way of New York City. You take raw search data scraped from Google and Reddit and transform it into a clean, prioritized set of queries that donors, corporate partners, and volunteers actually type when looking for organizations to support in New York City.
 
 Your job is to:
-1. Remove anything irrelevant to the organization's actual work.
+1. Remove anything irrelevant to UWNYC's supporter acquisition goals.
 2. Remove duplicates — keep the clearest, most natural-sounding version.
 3. Group surviving queries by WHO is asking:
-   - people_seeking_help: someone who needs the service (highest AEO priority)
-   - donors_and_supporters: someone who wants to give money or advocate
-   - volunteers: someone who wants to give their time
-4. Phrase each query exactly as a real person would type it into ChatGPT or Google.
-   Short, natural, no jargon.
+   - donors: individual people looking to donate money to a cause or nonprofit in NYC
+   - corporate_partners: companies looking for CSR partnerships, employee giving programs, or community investment opportunities
+   - volunteers: people looking to give their time and skills to a nonprofit in NYC
+4. Phrase each query exactly as a real supporter would type it into ChatGPT or Google. Short, natural, no jargon.
 
-You prioritize queries where the intent is specific enough that an AI search engine
-would cite a named organization (not just generic government sites)."""
+You prioritize queries where the intent is specific enough that an AI search engine would cite a named organization."""
 
 
 def build_discovery_prompt(
@@ -80,16 +75,16 @@ Clean, deduplicate, and group these into the most valuable AEO queries.
 
 Return ONLY valid JSON, no markdown fences, no preamble, with this exact structure:
 {{
-  "people_seeking_help":  ["query 1", "query 2", "query 3"],
-  "donors_and_supporters": ["query 1", "query 2"],
-  "volunteers":           ["query 1", "query 2"]
+  "donors":            ["query 1", "query 2", "query 3"],
+  "corporate_partners": ["query 1", "query 2"],
+  "volunteers":        ["query 1", "query 2"]
 }}
 
 Rules:
 - Maximum 8 queries per category. Fewer is fine if there is not enough quality data.
 - Every query must be phrased as a real person would type it — natural language.
-- Remove anything that is not clearly related to {org_name}'s actual services.
-- Prefer specific over vague. "emergency rent help in the Bronx" beats "help".
+- Remove anything not related to supporting, funding, or partnering with nonprofits in New York City.
+- Prefer specific over vague. "best nonprofits to donate to in NYC" beats "donate".
 - If a category has no relevant queries in the data, return an empty list for it."""
 
 
